@@ -1,4 +1,4 @@
-from gdax_api import Client
+from gdax_api import PublicClient
 
-client = Client()
+client = PublicClient()
 print(client.get_product_ticker('BTC-USD'))
