@@ -3,7 +3,7 @@ import requests
 
 class PublicClient(object):
     def __init__(self):
-        self.endpoint= 'https://api.gdax.com'
+        self.endpoint = 'https://api.gdax.com'
         pass
 
     def get_products(self):
