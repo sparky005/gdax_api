@@ -35,3 +35,7 @@ class PublicClient(object):
     def get_currencies(self):
         r = requests.get("{}/currencies".format(self.endpoint))
         return r.json()
+
+    def get_time(self):
+        r = requests.get("{}/time".format(self.endpoint))
+        return r.json()

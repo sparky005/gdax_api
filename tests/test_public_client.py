@@ -113,7 +113,7 @@ def test_get_trades(client, product):
     assert set(trade_keys()).issubset(response[0].keys()), "Trade dict should contain the following keys: {}".format(trade_keys())
 
 
-@vcr.use_cassette('tests/cassettes/historic_rates')
+@vcr.use_cassette('tests/cassettes/historic_rates.yml')
 def test_get_historic_rates(client, product):
     """Test API call to get historic rates as OHLC candles"""
     response = client.get_historic_rates(product)
@@ -123,7 +123,7 @@ def test_get_historic_rates(client, product):
     assert isinstance(response[0][0], int), "First entry should be trade ID"
 
 
-@vcr.use_cassette('tests/cassettes/stats')
+@vcr.use_cassette('tests/cassettes/stats.yml')
 def test_get_stats(client, product):
     """Test API call to get 24 hour stats"""
     response = client.get_stats(product)
@@ -131,7 +131,7 @@ def test_get_stats(client, product):
     assert set(stats_keys()).issubset(response.keys()), "Stats should contain the stats keys: {}".format(stats_keys())
 
 
-@vcr.use_cassette('tests/cassettes/currencies')
+@vcr.use_cassette('tests/cassettes/currencies.yml')
 def test_get_currencies(client):
     """Test API call to get all currencies"""
     response = client.get_currencies()
@@ -139,3 +139,11 @@ def test_get_currencies(client):
     assert isinstance(response, list), "Currency response should be list"
     assert isinstance(response[0], dict), "List entries should be dicts"
     assert set(currency_keys()).issubset(response[0].keys()), "Currency dict should contain the following keys: {}".format(currency_keys())
+
+@vcr.use_cassette('tests/cassettes/time.yml')
+def test_get_time(client):
+    """Test API call to get current server time"""
+    response = client.get_time()
+
+    assert isinstance(response, dict), "Response should be a dict"
+    assert set(['iso', 'epoch']).issubset(response.keys()), "Response should contain the following keys: {}".format(['iso', 'epoch'])
