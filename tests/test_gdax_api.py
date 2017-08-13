@@ -6,21 +6,34 @@ import vcr
 def product():
     return 'BTC-USD'
 
+@fixture
+def client():
+    """
+    Initialize an API client so we don't have to
+    initliaze a new one for each function
+    """
+
+    client = Client()
+    return client
+
 def product_keys():
     # returns test data
     return ['id', 'base_currency', 'quote_currency',
             'base_min_size', 'base_max_size', 'quote_increment']
 
-@fixture
 def product_order_book_keys():
     # returns test data
     return ['sequence', 'bids', 'asks']
 
+def product_ticker_keys():
+    # returns test data
+    return ['trade_id', 'price', 'size', 'bid', 'ask', 'volume', 'time']
+
+
 
 @vcr.use_cassette('tests/cassettes/products.yml')
-def test_get_products():
+def test_get_products(client):
     """Test API call to get available products"""
-    client = Client()
     response = client.get_products()
 
     assert isinstance(response, list), "Response should be a list"
@@ -33,9 +46,8 @@ def test_get_products():
                                 ('BTC-USD', 1),
                                 ('BTC-USD', 2),
                                 (product(), 3)])
-def test_get_product_order_book(product, level):
+def test_get_product_order_book(client, product, level):
     """Test API call to get orders for single product"""
-    client = Client()
     response = client.get_product_order_book(product, level)
 
     assert isinstance(response, dict), "Order book should be a dict"
@@ -53,8 +65,7 @@ def test_get_product_order_book(product, level):
         assert len(response['asks']) > 50, "l2 should return > 50 asks"
 
 
-def test_get_product_ticker(product):
-    client = Client()
+def test_get_product_ticker(client, product):
     response = client.get_product_ticker(product)
     assert isinstance(response, dict)
-
+    assert set(product_ticker_keys()).issubset(response.keys())
