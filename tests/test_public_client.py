@@ -51,6 +51,10 @@ def stats_keys():
     # returns test data
     return ['open', 'high', 'low', 'volume']
 
+def currency_keys():
+    # returns test data
+    return ['id', 'name', 'min_size']
+
 
 ###################################
 # Actual tests:
@@ -125,3 +129,13 @@ def test_get_stats(client, product):
     response = client.get_stats(product)
     assert isinstance(response, dict), "Stats response should be dict"
     assert set(stats_keys()).issubset(response.keys()), "Stats should contain the stats keys: {}".format(stats_keys())
+
+
+@vcr.use_cassette('tests/cassettes/currencies')
+def test_get_currencies(client):
+    """Test API call to get all currencies"""
+    response = client.get_currencies()
+
+    assert isinstance(response, list), "Currency response should be list"
+    assert isinstance(response[0], dict), "List entries should be dicts"
+    assert set(currency_keys()).issubset(response[0].keys()), "Currency dict should contain the following keys: {}".format(currency_keys())

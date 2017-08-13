@@ -31,3 +31,7 @@ class PublicClient(object):
     def get_stats(self, product):
         r = requests.get("{}/products/{}/stats".format(self.api, product))
         return r.json()
+
+    def get_currencies(self):
+        r = requests.get("{}/currencies".format(self.api))
+        return r.json()
