@@ -1,7 +1,6 @@
 from pytest import fixture, mark, skip
 from gdax_api import PublicClient
-import vcr
-
+import vcr 
 ##################################
 # Fixtures:
 # Fixtures that will be used across
@@ -105,3 +104,11 @@ def test_get_trades(client, product):
     assert isinstance(response[0], dict)
     assert set(trade_keys()).issubset(response[0].keys())
 
+@vcr.use_cassette('tests/cassettes/historic_rates')
+def test_get_historic_rates(client, product):
+    """Test API call to get historic rates as OHLC candles"""
+    response = client.get_historic_rates(product)
+    assert isinstance(response, list), "Response should be a list of candles"
+    assert isinstance(response[0], list), "Candle itself should be list of info"
+    assert len(response[0]) == 6, "Candles should be len 6"
+    assert isinstance(response[0][0], int), "First entry should be trade ID"

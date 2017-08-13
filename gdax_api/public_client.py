@@ -21,3 +21,9 @@ class PublicClient(object):
     def get_trades(self, product):
         r = requests.get("{}/products/{}/trades".format(self.api, product))
         return r.json()
+
+    def get_historic_rates(self, product, start=None, end=None, granularity=None):
+        r = requests.get("{}/products/{}/candles".format(self.api, product),
+                        data={'start': start, 'end': end,
+                            'granularity': granularity})
+        return r.json()
