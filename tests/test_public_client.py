@@ -65,7 +65,7 @@ def test_get_products(client):
 
     assert isinstance(response, list), "Response should be a list"
     assert isinstance(response[0], dict), "First element should be a dict"
-    assert set(product_keys()).issubset(response[0].keys()), "Keys should be in response"
+    assert set(product_keys()).issubset(response[0].keys()), "Product dict should contain the following keys: {}".format(product_keys())
 
 
 @vcr.use_cassette('tests/cassettes/product_order_book.yml')
@@ -78,7 +78,7 @@ def test_get_product_order_book(client, product, level):
     response = client.get_product_order_book(product, level)
 
     assert isinstance(response, dict), "Order book should be a dict"
-    assert set(product_order_book_keys()).issubset(response.keys()), "Should contain three keys"
+    assert set(product_order_book_keys()).issubset(response.keys()), "Order book dict should contain the following keys: {}".format(product_order_book_keys())
     assert isinstance(response['sequence'], int), "Sequence must be in"
     assert isinstance(response['bids'], list), "Bids should be a list"
     assert isinstance(response['asks'], list), "Asks should be a list"
@@ -96,17 +96,17 @@ def test_get_product_order_book(client, product, level):
 def test_get_product_ticker(client, product):
     """Test API call to product ticker"""
     response = client.get_product_ticker(product)
-    assert isinstance(response, dict)
-    assert set(product_ticker_keys()).issubset(response.keys())
+    assert isinstance(response, dict), "Product ticker should be dict"
+    assert set(product_ticker_keys()).issubset(response.keys()), "Product ticker should contain the following keys: {}".format(product_ticker_keys())
 
 
 @vcr.use_cassette('tests/cassettes/trades.yml')
 def test_get_trades(client, product):
     """List latest trades for a product"""
     response = client.get_trades(product)
-    assert isinstance(response, list)
-    assert isinstance(response[0], dict)
-    assert set(trade_keys()).issubset(response[0].keys())
+    assert isinstance(response, list), "Trades should be list"
+    assert isinstance(response[0], dict), "Trades should be list of dicts"
+    assert set(trade_keys()).issubset(response[0].keys()), "Trade dict should contain the following keys: {}".format(trade_keys())
 
 
 @vcr.use_cassette('tests/cassettes/historic_rates')
