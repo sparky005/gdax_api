@@ -69,15 +69,18 @@ def test_get_product_order_book(client, product, level):
         assert len(response['asks']) > 50, "l2 should return > 50 asks"
 
 
+@vcr.use_cassette('tests/cassettes/product_ticker.yml')
 def test_get_product_ticker(client, product):
     """Test API call to product ticker"""
     response = client.get_product_ticker(product)
     assert isinstance(response, dict)
     assert set(product_ticker_keys()).issubset(response.keys())
 
+
+@vcr.use_cassette('tests/cassettes/trades.yml')
 def test_get_trades(client, product):
     """List latest trades for a product"""
     response = client.get_trades(product)
     assert isinstance(response, list)
-    assert isinstance(response[0], list)
-    assert set(trade_keys()).issubset(response.keys())
+    assert isinstance(response[0], dict)
+    assert set(trade_keys()).issubset(response[0].keys())

@@ -17,3 +17,7 @@ class PublicClient(object):
     def get_product_ticker(self, product):
         r = requests.get("{}/products/{}/ticker".format(self.api, product))
         return r.json()
+
+    def get_trades(self, product):
+        r = requests.get("{}/products/{}/trades".format(self.api, product))
+        return r.json()
