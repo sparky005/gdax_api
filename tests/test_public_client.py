@@ -47,6 +47,10 @@ def trade_keys():
     # returns test data
     return ['time', 'trade_id', 'price', 'size', 'side']
 
+def stats_keys():
+    # returns test data
+    return ['open', 'high', 'low', 'volume']
+
 
 ###################################
 # Actual tests:
@@ -104,6 +108,7 @@ def test_get_trades(client, product):
     assert isinstance(response[0], dict)
     assert set(trade_keys()).issubset(response[0].keys())
 
+
 @vcr.use_cassette('tests/cassettes/historic_rates')
 def test_get_historic_rates(client, product):
     """Test API call to get historic rates as OHLC candles"""
@@ -112,3 +117,11 @@ def test_get_historic_rates(client, product):
     assert isinstance(response[0], list), "Candle itself should be list of info"
     assert len(response[0]) == 6, "Candles should be len 6"
     assert isinstance(response[0][0], int), "First entry should be trade ID"
+
+
+@vcr.use_cassette('tests/cassettes/stats')
+def test_get_stats(client, product):
+    """Test API call to get 24 hour stats"""
+    response = client.get_stats(product)
+    assert isinstance(response, dict), "Stats response should be dict"
+    assert set(stats_keys()).issubset(response.keys()), "Stats should contain the stats keys: {}".format(stats_keys())

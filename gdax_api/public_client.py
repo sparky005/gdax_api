@@ -27,3 +27,7 @@ class PublicClient(object):
                         data={'start': start, 'end': end,
                             'granularity': granularity})
         return r.json()
+
+    def get_stats(self, product):
+        r = requests.get("{}/products/{}/stats".format(self.api, product))
+        return r.json()
