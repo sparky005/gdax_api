@@ -10,7 +10,7 @@ class PublicClient(object):
         r = requests.get('{}/products'.format(self.api))
         return r.json()
 
-    def get_product_order_book(self, product, level):
+    def get_product_order_book(self, product, level=1):
         r = requests.get('{}/products/{}/book'.format(self.api, product), data={'level': level})
         return r.json()
 

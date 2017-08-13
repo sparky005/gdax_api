@@ -2,6 +2,13 @@ from pytest import fixture, mark, skip
 from gdax_api import PublicClient
 import vcr
 
+##################################
+# Fixtures:
+# Fixtures that will be used across
+# all tests
+##################################
+
+
 @fixture
 def product():
     return 'BTC-USD'
@@ -15,6 +22,14 @@ def client():
 
     client = PublicClient()
     return client
+
+
+###################################
+# Test data:
+# All methods herein produce test
+# validation data (ie keys in dicts)
+###################################
+
 
 def product_keys():
     # returns test data
@@ -33,6 +48,11 @@ def trade_keys():
     # returns test data
     return ['time', 'trade_id', 'price', 'size', 'side']
 
+
+###################################
+# Actual tests:
+# ok now we're actually testing
+###################################
 
 
 @vcr.use_cassette('tests/cassettes/products.yml')
@@ -84,3 +104,4 @@ def test_get_trades(client, product):
     assert isinstance(response, list)
     assert isinstance(response[0], dict)
     assert set(trade_keys()).issubset(response[0].keys())
+
