@@ -7,11 +7,11 @@ class PublicClient(object):
         pass
 
     def get_products(self):
-        r = requests.get(self.api + '/products')
+        r = requests.get('{}/products'.format(self.api))
         return r.json()
 
     def get_product_order_book(self, product, level):
-        r = requests.get(self.api + '/products/' + product + '/book', data={'level': level})
+        r = requests.get('{}/products/{}/book'.format(self.api, product), data={'level': level})
         return r.json()
 
     def get_product_ticker(self, product):
